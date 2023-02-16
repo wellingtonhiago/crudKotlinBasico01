@@ -3,6 +3,9 @@ package com.kotlin.crudBasico01
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.PutMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseStatus
 import org.springframework.web.bind.annotation.RestController
@@ -18,6 +21,19 @@ class UserController(private val users : UserRepository) {
     @GetMapping("/{email}")
     fun lookup(@PathVariable email: String) : User = users.findById(email).orElseThrow {
         UserNotFoundException(email)
+    }
+
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    fun create(@RequestBody user: User): User = users.save(user)
+
+    @PutMapping("/{email}")
+    fun update(@PathVariable email: String, @RequestBody request: User): User {
+        val user = users.findById(email).orElseThrow { UserNotFoundException(email) }
+
+        return users.save(user.apply {
+            this.name = request.name
+        })
     }
 }
 

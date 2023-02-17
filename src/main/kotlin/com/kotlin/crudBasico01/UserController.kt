@@ -45,6 +45,7 @@ class UserController(private val users : UserRepository) {
         }
          return ResponseEntity(HttpStatus.NO_CONTENT)
     }
+
 }
 
 @ResponseStatus(HttpStatus.NOT_FOUND)
